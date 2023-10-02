@@ -1,0 +1,271 @@
+@font-face {
+  font-family: "press-start";
+  src: url("../fonts/press-start.k.ttf") format("opentype");
+}
+
+body {
+  position: fixed;
+  background: url("../neon-landscape-background_53876-91655.avif") no-repeat
+    fixed center;
+  background-size: 100% 100%;
+  z-index: -1;
+  width: 100%;
+  font-family: "press-start";
+  margin: auto;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-areas: "header" "content" "footer";
+  margin: auto;
+  max-width: 1300px;
+  width: 100%;
+  color: #fff;
+  z-index: 0;
+}
+
+/*------------------------*/
+
+header {
+  height: 5vh;
+}
+
+/*------------------------*/
+.screen-active {
+  display: grid;
+}
+.screen-inactive {
+  display: none;
+}
+
+/*------------------------*/
+
+#start-screen {
+  height: 90vh;
+  grid-template-columns: auto;
+  grid-template-rows: 50% 50%;
+}
+
+#start-heading {
+  grid-column: 1;
+  grid-row: 1;
+  text-align: center;
+  display: grid;
+  align-items: center;
+  font-size: 2rem;
+}
+#start-buttons {
+  grid-column: 1;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: auto auto auto;
+  align-items: center;
+  margin: auto;
+}
+.button-styles {
+  font-family: "press-start";
+  width: 150px;
+  height: 30px;
+  margin: 10px 0;
+  border-radius: 10px;
+  background-color: #76171d;
+  color: #fff;
+
+  transition: background-color 0.5s;
+}
+
+.button-styles:hover {
+  background-color: #177652;
+}
+
+#start-start {
+  grid-column: 1;
+  grid-row: 1;
+}
+#start-settings {
+  grid-column: 1;
+  grid-row: 2;
+}
+#start-control {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+/*------------------------*/
+
+#game-screen {
+  grid-area: content;
+  height: 80vh;
+  grid-template-columns: auto;
+  grid-template-rows: 5vh 75vh 10vh;
+}
+
+#game-score {
+  grid-column: 1;
+  grid-row: 1;
+  display: grid;
+  align-items: center;
+  margin: auto;
+}
+
+#game-canvas {
+  grid-column: 1;
+  grid-row: 2;
+  background-color: #09001c;
+  border-radius: 3px;
+  border-radius: 10px;
+}
+#game-screen-win {
+  grid-column: 1;
+  grid-row: 2;
+  align-items: center;
+  margin: auto;
+  z-index: 1;
+  text-align: center;
+}
+#game-screen-lose {
+  grid-column: 1;
+  grid-row: 2;
+  align-items: center;
+  margin: auto;
+  z-index: 1;
+  text-align: center;
+}
+
+.game-screen-active {
+  display: grid;
+}
+
+.game-screen-inactive {
+  display: none;
+}
+
+#start-pause {
+  grid-column: 1;
+  grid-row: 3;
+  display: grid;
+  align-items: center;
+  margin: auto;
+  grid-template-columns: auto auto auto;
+  grid-template-rows: auto;
+}
+#start-pause-back {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0 5px;
+}
+#start-pause-start {
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0 5px;
+}
+#start-pause-pause {
+  grid-column: 3;
+  grid-row: 1;
+  margin: 0 5px;
+}
+
+/*------------------------*/
+
+#settings-screen {
+  height: 90vh;
+  grid-template-columns: auto;
+  grid-template-rows: 20% 90%;
+}
+#settings-back {
+  grid-row: 1;
+  grid-column: 1;
+  display: grid;
+  align-items: center;
+  margin: auto;
+}
+#settings-select-difficulty {
+  grid-row: 2;
+  grid-column: 1;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: 100px;
+}
+#settings-select-difficulty label {
+  grid-column: 1;
+  grid-row: 1;
+  margin: auto;
+}
+#settings-select-difficulty select {
+  grid-column: 2;
+  grid-row: 1;
+  margin: auto;
+  font-family: "press-start";
+  width: 150px;
+  height: 30px;
+  padding: 0px 10px;
+}
+
+#settings-select-difficulty select option {
+  padding: 8px 16px;
+}
+
+#option-easy {
+  background-color: #fff979;
+}
+#option-normal {
+  background-color: #ad5300;
+}
+#option-hard {
+  background-color: #a60013;
+}
+/*------------------------*/
+
+#controls-screen {
+  height: 80vh;
+  grid-template-columns: auto;
+  grid-template-rows: 20% 90%;
+}
+#controls-back {
+  grid-column: 1;
+  grid-row: 1;
+  margin: auto;
+  display: grid;
+  align-items: center;
+}
+#controls-controls {
+  grid-column: 1;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: 100px 100px 100px;
+  text-align: center;
+}
+#controls-label-l {
+  grid-column: 1;
+  grid-row: 1;
+}
+#controls-key-l {
+  grid-column: 2;
+  grid-row: 1;
+}
+#controls-label-r {
+  grid-column: 1;
+  grid-row: 2;
+}
+#controls-key-r {
+  grid-column: 2;
+  grid-row: 2;
+}
+#controls-label-click {
+  grid-column: 1;
+  grid-row: 3;
+}
+#controls-key-click {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+/*------------------------*/
+
+footer {
+  grid-area: footer;
+  height: 5vh;
+}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles/layout/index.css" />
+    <script src=""></script>
+    <title>Alien Invaders</title>
+  </head>
+  <body>
+    <div class="wrapper">
+      <header></header>
+      <main>
+        <div id="start-screen" class="screen screen-active">
+          <div id="start-heading">
+            <h1>Alien Invaders</h1>
+          </div>
+          <div id="start-buttons">
+            <button
+              id="start-start"
+              class="button-styles"
+              onclick='changeActive("game-screen")'
+            >
+              start
+            </button>
+            <button
+              id="start-settings"
+              class="button-styles"
+              onclick='changeActive("settings-screen")'
+            >
+              settings
+            </button>
+            <button
+              id="start-controls"
+              class="button-styles"
+              onclick='changeActive("controls-screen")'
+            >
+              controls
+            </button>
+          </div>
+        </div>
+        <div id="game-screen" class="screen screen-inactive">
+          <div id="game-score">
+            <p>Score: 0</p>
+          </div>
+          <div id="game-canvas">
+            <canvas
+              >Your browser does not support <canvas class=""></canvas>
+            </canvas>
+          </div>
+          <div id="game-screen-win" class="game-screen-inactive">
+            <h1>You Win!</h1>
+            <p>Play again?</p>
+          </div>
+          <div id="game-screen-lose" class="game-screen-inactive">
+            <h1>You Lose!</h1>
+            <p>Try again?</p>
+          </div>
+          <div id="start-pause">
+            <button
+              id="start-pause-back"
+              class="button-styles"
+              onclick="backToStart()"
+            >
+              Go back
+            </button>
+            <button id="start-pause-start" class="button-styles">Start</button>
+            <button id="start-pause-pause" class="button-styles">Pause</button>
+          </div>
+        </div>
+        <div id="settings-screen" class="screen screen-inactive">
+          <div id="settings-back">
+            <button class="button-styles" onclick="backToStart()">
+              Go back
+            </button>
+          </div>
+          <div id="settings-select-difficulty">
+            <label for="settings-difficulty">Difficulty:</label
+            ><select id="settings-difficulty">
+              <option id="option-easy" value="easy">Easy</option>
+              <option id="option-normal" value="normal">Normal</option>
+              <option id="option-hard" value="hard">Hard</option>
+            </select>
+          </div>
+        </div>
+        <div id="controls-screen" class="screen screen-inactive">
+          <div id="controls-back">
+            <button class="button-styles" onclick="backToStart()">
+              Go back
+            </button>
+          </div>
+          <div id="controls-controls">
+            <p id="controls-label-l">Move Left</p>
+            <p id="controls-key-l">a</p>
+            <p id="controls-label-r">Move Right</p>
+            <p id="controls-key-r">d</p>
+            <p id="controls-label-click">Fire</p>
+            <p id="controls-key-click">Left Mouse click</p>
+          </div>
+        </div>
+      </main>
+      <footer></footer>
+    </div>
+  </body>
+  <script src="./index.js"></script>
+  <script src="./screens.js"></script>
+</html>
