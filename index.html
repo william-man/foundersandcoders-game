@@ -11,7 +11,7 @@
     <div class="wrapper">
       <header></header>
       <main>
-        <div id="start-screen" class="screen screen-active">
+        <div id="start-screen" class="screen screen-inactive">
           <div id="start-heading">
             <h1>Alien Invaders</h1>
           </div>
@@ -19,7 +19,7 @@
             <button
               id="start-start"
               class="button-styles"
-              onclick='changeActive("game-screen")'
+              onclick='changeActive("game-screen"), start(true)'
             >
               start
             </button>
@@ -39,14 +39,23 @@
             </button>
           </div>
         </div>
-        <div id="game-screen" class="screen screen-inactive">
+        <div id="game-screen" class="screen screen-active">
           <div id="game-score">
             <p>Score: 0</p>
           </div>
           <div id="game-canvas">
-            <canvas
+            <canvas id="game-canvas-screen"
               >Your browser does not support <canvas class=""></canvas>
             </canvas>
+          </div>
+          <div id="game-screen-start" class="game-screen-active">
+            <h1>Are you ready?</h1>
+            <button
+              class="button-styles"
+              onclick="start(false), resetGame(), resumeAnimate()"
+            >
+              Press Start
+            </button>
           </div>
           <div id="game-screen-win" class="game-screen-inactive">
             <h1>You Win!</h1>
@@ -60,12 +69,17 @@
             <button
               id="start-pause-back"
               class="button-styles"
-              onclick="backToStart()"
+              onclick="backToStart(), start(false)"
             >
               Go back
             </button>
-            <button id="start-pause-start" class="button-styles">Start</button>
-            <button id="start-pause-pause" class="button-styles">Pause</button>
+            <button
+              id="start-pause-pause"
+              class="button-styles"
+              onclick="pause(), pausePlay()"
+            >
+              Pause
+            </button>
           </div>
         </div>
         <div id="settings-screen" class="screen screen-inactive">

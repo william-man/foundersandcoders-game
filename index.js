@@ -1,4 +1,4 @@
-const canvas = document.getElementById("canvas");
+const canvas = document.getElementById("game-canvas-screen");
 const ctx = canvas.getContext("2d");
 canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
@@ -76,6 +76,12 @@ class Defender {
       }
     }
   }
+
+  reset() {
+    this.x = canvas.width / 2;
+    this.y = canvas.height * 0.9;
+    this.bullets = [];
+  }
 }
 
 // draw alien, this.svg = path data from svg file
@@ -108,16 +114,19 @@ class Aliens {
         "http://www.w3.org/2000/svg",
         "svg"
       );
+
       const tempPath = document.createElementNS(
         //create temporary path element
         "http://www.w3.org/2000/svg",
         "path"
       );
+
       tempPath.setAttribute("d", pathData); //add d attribute to path element
+      tempSvg.setAttribute("id", "temp");
       tempSvg.appendChild(tempPath); //append path element as a child to svg element
       document.body.appendChild(tempSvg); //append svg element to body
       const svgBoundingBox = tempPath.getBBox(); //get the bounding box of the svg path
-
+      document.getElementById("temp").remove();
       const alienXCentered =
         (this.x * i + this.x * (i + 1)) / 2 - (svgBoundingBox.width / 2) * 0.05;
 
@@ -150,6 +159,7 @@ class Aliens {
       ctx.restore();
     }
   }
+  //collision detection for bullet and alien
   checkCollision(bullet) {
     for (let i = 0; i < this.aliens.length; i++) {
       const alien = this.aliens[i];
@@ -176,6 +186,10 @@ class Aliens {
       }
     }
   }
+
+  reset() {
+    this.aliens = [];
+  }
 }
 
 //initialise objects
@@ -184,15 +198,16 @@ const defender = new Defender();
 const aliens_r1 = new Aliens(canvas.width, canvas.height / 10, 20, true);
 const aliens_r2 = new Aliens(canvas.width, (canvas.height / 10) * 2, 20, false);
 const aliens_r3 = new Aliens(canvas.width, (canvas.height / 10) * 3, 20, false);
-const horde = [aliens_r1, aliens_r2, aliens_r3];
+const horde = [aliens_r1];
 
-//draw game screen and animate objects
+//draw game screen and change game screen states
+
 let frameCount = 0;
 let animateAliens = false;
-let startGame = false;
+let gameOn = false;
 
 function animate() {
-  if (startGame === true) {
+  if (gameOn === true) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     defender.drawDefender();
     defender.updateBullets();
@@ -202,12 +217,46 @@ function animate() {
     aliens_r1.draw();
     frameCount += 1;
     requestAnimationFrame(animate);
+  } else {
+    return;
   }
 }
 let animation = requestAnimationFrame(animate);
 
+//animation controls
+function stopAnimate() {
+  gameOn = false;
+}
+
+function resumeAnimate() {
+  gameOn = true;
+  animateAliens = true;
+  animate();
+}
+
+function pausePlay() {
+  if (gameOn) {
+    stopAnimate();
+  } else {
+    resumeAnimate();
+  }
+}
+
+function resetGame() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  defender.reset();
+  defender.drawDefender();
+  for (let i = 0; i < horde.length; i++) {
+    if (horde[i].spawn) {
+      horde[i].reset();
+      horde[i].aliensList();
+      horde[i].draw();
+    }
+  }
+}
+
 //draw objects on load
-/*
+
 window.addEventListener("load", function (e) {
   defender.drawDefender();
   for (let i = 0; i < horde.length; i++) {
@@ -217,13 +266,13 @@ window.addEventListener("load", function (e) {
     }
   }
 });
-*/
+
 //controls
 
 function spaceDown(event) {
-  if (event.key === " " && startGame === false) {
+  if (event.key === " " && gameOn === false) {
     animateAliens = true;
-    startGame = true;
+    gameOn = true;
     animate();
   }
 }
@@ -246,16 +295,6 @@ window.addEventListener("keydown", spaceDown);
 window.addEventListener("keydown", leftDown);
 window.addEventListener("keydown", rightDown);
 canvas.addEventListener("click", fire);
-
-//stop animation and controls once the aliens reach the height limit
-
-function stopAnimate() {
-  cancelAnimationFrame(animation);
-  canvas.removeEventListener("click", fire);
-  window.removeEventListener("keydown", leftDown);
-  window.removeEventListener("keydown", rightDown);
-  window.removeEventListener("keydown", spaceDown);
-}
 
 //settings
 
