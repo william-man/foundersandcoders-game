@@ -3,6 +3,10 @@ const ctx = canvas.getContext("2d");
 canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
 
+///
+/// Defender class
+///
+
 class Defender {
   constructor() {
     this.x = canvas.width / 2;
@@ -65,10 +69,29 @@ class Defender {
     for (let i = 0; i < this.bullets.length; i++) {
       const bullet = this.bullets[i];
       bullet.y -= this.bulletv;
-      if (bullet.y < 0 || aliens_r1.checkCollision(bullet)) {
+      if (bullet.y < 0) {
         //remove bullet if y is less than 0 or collides with an alien
         this.bullets.splice(i, 1);
         i--;
+      } else if (
+        aliens_r1.checkCollision(bullet) ||
+        aliens_r2.checkCollision(bullet) ||
+        aliens_r3.checkCollision(bullet)
+      ) {
+        this.bullets.splice(i, 1);
+        i--;
+        addScore();
+        if (
+          horde[0].aliens.length === 0 &&
+          horde[1].aliens.length === 0 &&
+          horde[2].aliens.length === 0
+        ) {
+          stopAnimate();
+          document.getElementById("start-pause-pause").disabled = true;
+          const win = document.getElementById("game-screen-win");
+          win.classList.remove("game-screen-inactive");
+          win.classList.add("game-screen-active");
+        }
       } else {
         ctx.clearRect(bullet.x - 3, bullet.y - 25, 6, 12);
         ctx.beginPath();
@@ -84,7 +107,9 @@ class Defender {
   }
 }
 
-// draw alien, this.svg = path data from svg file
+///
+/// Alien class
+///
 
 class Aliens {
   constructor(x, y, amount, spawn) {
@@ -179,10 +204,14 @@ class Aliens {
 
   moveDown(distance) {
     for (let i = 0; i < this.aliens.length; i++) {
-      if (this.aliens[i].y < defender.y - 50) {
+      if (this.aliens[i].y < defender.y - 60) {
         this.aliens[i].y += distance;
       } else {
         stopAnimate();
+        document.getElementById("start-pause-pause").disabled = true;
+        const lose = document.getElementById("game-screen-lose");
+        lose.classList.remove("game-screen-inactive");
+        lose.classList.add("game-screen-active");
       }
     }
   }
@@ -192,29 +221,35 @@ class Aliens {
   }
 }
 
-//initialise objects
+///
+///initialise objects
+///
 
 const defender = new Defender();
-const aliens_r1 = new Aliens(canvas.width, canvas.height / 10, 20, true);
-const aliens_r2 = new Aliens(canvas.width, (canvas.height / 10) * 2, 20, false);
-const aliens_r3 = new Aliens(canvas.width, (canvas.height / 10) * 3, 20, false);
-const horde = [aliens_r1];
+const aliens_r1 = new Aliens(canvas.width, canvas.height / 10, 16, true);
+const aliens_r2 = new Aliens(canvas.width, (canvas.height / 10) * 2, 16, true);
+const aliens_r3 = new Aliens(canvas.width, (canvas.height / 10) * 3, 16, true);
+const horde = [aliens_r1, aliens_r2, aliens_r3];
 
-//draw game screen and change game screen states
+///
+///draw game screen and change game screen states
+///
 
 let frameCount = 0;
-let animateAliens = false;
 let gameOn = false;
+let player_score = 0;
 
 function animate() {
   if (gameOn === true) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     defender.drawDefender();
     defender.updateBullets();
-    if (animateAliens === true && frameCount % (60 * 3) === 0) {
-      aliens_r1.moveDown(20);
+    for (let i = 0; i < horde.length; i++) {
+      if (frameCount % (60 * 3) === 0 && horde[i].spawn === true) {
+        horde[i].moveDown(40);
+      }
+      horde[i].draw();
     }
-    aliens_r1.draw();
     frameCount += 1;
     requestAnimationFrame(animate);
   } else {
@@ -230,52 +265,73 @@ function stopAnimate() {
 
 function resumeAnimate() {
   gameOn = true;
-  animateAliens = true;
   animate();
 }
 
 function pausePlay() {
   if (gameOn) {
     stopAnimate();
+    window.removeEventListener("keydown", leftDown);
+    window.removeEventListener("keydown", rightDown);
+    canvas.removeEventListener("click", fire);
   } else {
     resumeAnimate();
+    window.addEventListener("keydown", leftDown);
+    window.addEventListener("keydown", rightDown);
+    canvas.addEventListener("click", fire);
   }
+}
+
+function clearScreen() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 function resetGame() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  document.getElementById("start-pause-pause").disabled = true;
   defender.reset();
-  defender.drawDefender();
   for (let i = 0; i < horde.length; i++) {
-    if (horde[i].spawn) {
-      horde[i].reset();
-      horde[i].aliensList();
-      horde[i].draw();
-    }
+    horde[i].reset();
   }
+  resetScore();
 }
 
-//draw objects on load
+function resetScore() {
+  player_score = 0;
+  document.getElementById("game-score-points").innerText =
+    "Score: " + player_score;
+}
 
-window.addEventListener("load", function (e) {
+//draw objects on press start
+function loadGame() {
   defender.drawDefender();
+  document.getElementById("start-pause-pause").disabled = false;
   for (let i = 0; i < horde.length; i++) {
     if (horde[i].spawn === true) {
       horde[i].aliensList();
       horde[i].draw();
     }
   }
-});
+}
 
-//controls
+function addScore() {
+  let score = document.getElementById("game-score-points");
+  player_score += 100;
+  score.innerText = "Score: " + player_score;
+}
 
+///
+///controls
+///
+
+/*
 function spaceDown(event) {
   if (event.key === " " && gameOn === false) {
-    animateAliens = true;
     gameOn = true;
     animate();
   }
 }
+*/
 function leftDown(e) {
   if (e.key === "a" && defender.x - 45 > 0) {
     defender.moveLeft();
@@ -291,7 +347,7 @@ function rightDown(e) {
 function fire(e) {
   defender.bulletFire();
 }
-window.addEventListener("keydown", spaceDown);
+//window.addEventListener("keydown", spaceDown);
 window.addEventListener("keydown", leftDown);
 window.addEventListener("keydown", rightDown);
 canvas.addEventListener("click", fire);

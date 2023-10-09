@@ -41,7 +41,7 @@
         </div>
         <div id="game-screen" class="screen screen-active">
           <div id="game-score">
-            <p>Score: 0</p>
+            <p id="game-score-points">Score: 0</p>
           </div>
           <div id="game-canvas">
             <canvas id="game-canvas-screen"
@@ -52,7 +52,7 @@
             <h1>Are you ready?</h1>
             <button
               class="button-styles"
-              onclick="start(false), resetGame(), resumeAnimate()"
+              onclick="start(false),resetGame(), resumeAnimate(), loadGame()"
             >
               Press Start
             </button>
@@ -60,16 +60,43 @@
           <div id="game-screen-win" class="game-screen-inactive">
             <h1>You Win!</h1>
             <p>Play again?</p>
+            <div id="game-screen-win-buttons">
+              <button
+                class="button-styles"
+                onclick="resetGame(),win(false), start(true)"
+              >
+                Yes
+              </button>
+              <button
+                class="button-styles"
+                onclick='resetGame(), resetScore(), changeActive("start-screen"),win(false),pause()'
+              >
+                No
+              </button>
+            </div>
           </div>
           <div id="game-screen-lose" class="game-screen-inactive">
             <h1>You Lose!</h1>
             <p>Try again?</p>
+            <div id="game-screen-lose-buttons">
+              <button
+                class="button-styles"
+                onclick="resetGame(),lose(false), start(true)"
+              >
+                Yes</button
+              ><button
+                class="button-styles"
+                onclick='resetGame(), resetScore(), changeActive("start-screen"),lose(false),pause()'
+              >
+                No
+              </button>
+            </div>
           </div>
           <div id="start-pause">
             <button
               id="start-pause-back"
               class="button-styles"
-              onclick="backToStart(), start(false)"
+              onclick="backToStart(), start(false),lose(false) ,stopAnimate(),pause(), resetGame(), clearScreen()"
             >
               Go back
             </button>
@@ -77,9 +104,13 @@
               id="start-pause-pause"
               class="button-styles"
               onclick="pause(), pausePlay()"
+              disabled
             >
               Pause
             </button>
+          </div>
+          <div id="game-screen-pause" class="game-screen-inactive">
+            <h1>Paused</h1>
           </div>
         </div>
         <div id="settings-screen" class="screen screen-inactive">

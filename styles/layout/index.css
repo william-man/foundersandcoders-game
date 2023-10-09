@@ -150,6 +150,10 @@ header {
   text-align: center;
 }
 
+#game-screen-lose-buttons {
+  margin: auto;
+}
+
 .game-screen-active {
   display: grid;
 }
@@ -181,6 +185,14 @@ header {
   grid-column: 3;
   grid-row: 1;
   margin: 0 5px;
+}
+#game-screen-pause {
+  grid-column: 1;
+  grid-row: 2;
+  align-items: center;
+  margin: auto;
+  z-index: 1;
+  text-align: center;
 }
 
 /*------------------------*/
