@@ -175,13 +175,13 @@ class Aliens {
       ctx.scale(0.09, 0.09);
       ctx.fillStyle = this.colour;
       ctx.fill(this.img);
-
+      /*debug hitbox
       ctx.beginPath();
       ctx.lineWidth = "10";
       ctx.rect(alien.boxX, alien.boxY, alien.boxWidth, alien.boxHeight);
       ctx.strokeStyle = "red";
       ctx.stroke();
-
+      */
       ctx.restore();
     }
   }
