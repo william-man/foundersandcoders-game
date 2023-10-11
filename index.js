@@ -112,7 +112,7 @@ class Defender {
 ///
 
 class Aliens {
-  constructor(x, y, amount, spawn) {
+  constructor(x, y, amount, spawn, colour) {
     this.x = x / amount;
     this.y = y;
     this.amount = amount;
@@ -124,6 +124,7 @@ class Aliens {
     //alien list
     this.aliens = [];
     this.spawn = spawn;
+    this.colour = colour;
   }
 
   aliensList() {
@@ -153,7 +154,7 @@ class Aliens {
       const svgBoundingBox = tempPath.getBBox(); //get the bounding box of the svg path
       document.getElementById("temp").remove();
       const alienXCentered =
-        (this.x * i + this.x * (i + 1)) / 2 - (svgBoundingBox.width / 2) * 0.05;
+        (this.x * i + this.x * (i + 1)) / 2 - (svgBoundingBox.width / 2) * 0.09;
 
       this.aliens.push({
         x: alienXCentered,
@@ -171,8 +172,8 @@ class Aliens {
       const alien = this.aliens[i];
       ctx.save();
       ctx.translate(alien.x, alien.y);
-      ctx.scale(0.05, 0.05);
-      ctx.fillStyle = "green";
+      ctx.scale(0.09, 0.09);
+      ctx.fillStyle = this.colour;
       ctx.fill(this.img);
 
       ctx.beginPath();
@@ -191,9 +192,9 @@ class Aliens {
 
       if (
         bullet.x >= alien.x &&
-        bullet.x <= alien.x + alien.boxWidth * 0.05 &&
+        bullet.x <= alien.x + alien.boxWidth * 0.09 &&
         bullet.y - 12 >= alien.y &&
-        bullet.y - 12 <= alien.y + alien.boxHeight * 0.05
+        bullet.y - 12 <= alien.y + alien.boxHeight * 0.09
       ) {
         this.aliens.splice(i, 1);
         return true;
@@ -226,9 +227,27 @@ class Aliens {
 ///
 
 const defender = new Defender();
-const aliens_r1 = new Aliens(canvas.width, canvas.height / 10, 16, true);
-const aliens_r2 = new Aliens(canvas.width, (canvas.height / 10) * 2, 16, true);
-const aliens_r3 = new Aliens(canvas.width, (canvas.height / 10) * 3, 16, true);
+const aliens_r1 = new Aliens(
+  canvas.width,
+  canvas.height / 10,
+  16,
+  true,
+  "#DC08A6"
+);
+const aliens_r2 = new Aliens(
+  canvas.width,
+  (canvas.height / 10) * 2,
+  16,
+  false,
+  "#C67D67"
+);
+const aliens_r3 = new Aliens(
+  canvas.width,
+  (canvas.height / 10) * 3,
+  16,
+  false,
+  "#4FB4CC"
+);
 const horde = [aliens_r1, aliens_r2, aliens_r3];
 
 ///
@@ -246,7 +265,7 @@ function animate() {
     defender.updateBullets();
     for (let i = 0; i < horde.length; i++) {
       if (frameCount % (60 * 3) === 0 && horde[i].spawn === true) {
-        horde[i].moveDown(40);
+        horde[i].moveDown(20);
       }
       horde[i].draw();
     }
@@ -354,24 +373,27 @@ canvas.addEventListener("click", fire);
 
 //settings
 
-function easy() {
-  aliens_r1.spawn = true;
-  aliens_r2.spawn = false;
-  aliens_r3.spawn = false;
-}
-
-function normal() {
-  aliens_r1.spawn = true;
-  aliens_r2.spawn = true;
-  aliens_r3.spawn = false;
-}
-
-function hard() {
-  aliens_r1.spawn = true;
-  aliens_r2.spawn = true;
-  aliens_r3.spawn = true;
-}
-
-function defenderSpeed(value) {
-  defender.strafe = value;
+function difficultyChange() {
+  const level = document.getElementById("settings-difficulty").value;
+  switch (level) {
+    case "easy":
+      aliens_r1.spawn = true;
+      aliens_r2.spawn = false;
+      aliens_r3.spawn = false;
+      break;
+    case "normal":
+      aliens_r1.spawn = true;
+      aliens_r2.spawn = true;
+      aliens_r3.spawn = false;
+      break;
+    case "hard":
+      aliens_r1.spawn = true;
+      aliens_r2.spawn = true;
+      aliens_r3.spawn = true;
+      break;
+    default:
+      aliens_r1.spawn = true;
+      aliens_r2.spawn = false;
+      aliens_r3.spawn = false;
+  }
 }

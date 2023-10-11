@@ -54,7 +54,7 @@
               class="button-styles"
               onclick="start(false),resetGame(), resumeAnimate(), loadGame()"
             >
-              Press Start
+              Start
             </button>
           </div>
           <div id="game-screen-win" class="game-screen-inactive">
@@ -121,7 +121,7 @@
           </div>
           <div id="settings-select-difficulty">
             <label for="settings-difficulty">Difficulty:</label
-            ><select id="settings-difficulty">
+            ><select id="settings-difficulty" onchange="difficultyChange()">
               <option id="option-easy" value="easy">Easy</option>
               <option id="option-normal" value="normal">Normal</option>
               <option id="option-hard" value="hard">Hard</option>
