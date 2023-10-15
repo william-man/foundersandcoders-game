@@ -1,7 +1,5 @@
 const canvas = document.getElementById("game-canvas-screen");
 const ctx = canvas.getContext("2d");
-canvas.width = canvas.offsetWidth;
-canvas.height = canvas.offsetHeight;
 
 ///
 /// Defender class
@@ -9,8 +7,8 @@ canvas.height = canvas.offsetHeight;
 
 class Defender {
   constructor() {
-    this.x = canvas.width / 2;
-    this.y = canvas.height * 0.9;
+    this.x = 0;
+    this.y = 0;
     this.bulletv = 10;
     this.bulletx = this.x;
     this.bullety = this.y - 50;
@@ -112,9 +110,9 @@ class Defender {
 ///
 
 class Aliens {
-  constructor(x, y, amount, spawn, colour) {
-    this.x = x / amount;
-    this.y = y;
+  constructor(amount, spawn, colour) {
+    this.x = 0;
+    this.y = 0;
     this.amount = amount;
     this.svg =
       '<svg height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  viewBox="0 0 512 512" xml:space="preserve"> <path id="alien" style="fill:#AC92EC;" d="M469.344,266.664v-85.328h-42.656v-42.672H384v-21.328h42.688v-64h-64v42.656H320v42.672H192V95.992 h-42.656V53.336h-64v64H128v21.328H85.344v42.672H42.688v85.328H0v149.328h64v-85.328h21.344v85.328H128v42.672h106.688v-64h-85.344 v-21.328h213.344v21.328h-85.344v64H384v-42.672h42.688v-85.328H448v85.328h64V266.664H469.344z M192,245.336h-64v-64h64V245.336z M384,245.336h-64v-64h64V245.336z"/> </svg>';
@@ -227,27 +225,9 @@ class Aliens {
 ///
 
 const defender = new Defender();
-const aliens_r1 = new Aliens(
-  canvas.width,
-  canvas.height / 10,
-  16,
-  true,
-  "#DC08A6"
-);
-const aliens_r2 = new Aliens(
-  canvas.width,
-  (canvas.height / 10) * 2,
-  16,
-  false,
-  "#C67D67"
-);
-const aliens_r3 = new Aliens(
-  canvas.width,
-  (canvas.height / 10) * 3,
-  16,
-  false,
-  "#4FB4CC"
-);
+const aliens_r1 = new Aliens(16, true, "#DC08A6");
+const aliens_r2 = new Aliens(16, false, "#C67D67");
+const aliens_r3 = new Aliens(16, false, "#4FB4CC");
 const horde = [aliens_r1, aliens_r2, aliens_r3];
 
 ///
@@ -292,12 +272,12 @@ function pausePlay() {
     stopAnimate();
     window.removeEventListener("keydown", leftDown);
     window.removeEventListener("keydown", rightDown);
-    canvas.removeEventListener("click", fire);
+    window.removeEventListener("click", fire);
   } else {
     resumeAnimate();
     window.addEventListener("keydown", leftDown);
     window.addEventListener("keydown", rightDown);
-    canvas.addEventListener("click", fire);
+    window.addEventListener("click", fire);
   }
 }
 
@@ -323,10 +303,16 @@ function resetScore() {
 
 //draw objects on press start
 function loadGame() {
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+  defender.x = canvas.width / 2;
+  defender.y = canvas.height * 0.9;
   defender.drawDefender();
   document.getElementById("start-pause-pause").disabled = false;
   for (let i = 0; i < horde.length; i++) {
     if (horde[i].spawn === true) {
+      horde[i].x = canvas.width / horde[i].amount;
+      horde[i].y = (canvas.height / 10) * (i + 1);
       horde[i].aliensList();
       horde[i].draw();
     }
@@ -369,7 +355,7 @@ function fire(e) {
 //window.addEventListener("keydown", spaceDown);
 window.addEventListener("keydown", leftDown);
 window.addEventListener("keydown", rightDown);
-canvas.addEventListener("click", fire);
+window.addEventListener("click", fire);
 
 //settings
 

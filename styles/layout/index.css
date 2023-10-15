@@ -114,7 +114,6 @@ main {
 #game-canvas {
   grid-column: 1;
   grid-row: 2;
-
   border-radius: 3px;
   border-radius: 10px;
 }
@@ -149,10 +148,14 @@ main {
   margin: auto;
   z-index: 1;
   text-align: center;
+  column-gap: 10px;
 }
 
-#game-screen-lose-buttons {
-  margin: auto;
+#game-screen-lose-buttons button {
+  margin: 0 10px;
+}
+#game-screen-win-buttons {
+  margin: 0 10px;
 }
 
 .game-screen-active {
